@@ -1,18 +1,48 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-//Bootstrap
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap"
 
-// index.css'
 import '../styles/index.css'
 
-// components
-import Home from './components/Home';
+import { Contador } from './components/Reloj';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Home/>
-  </React.StrictMode>,
-)
+
+const ReactRender = ReactDOM.createRoot(document.getElementById('root'))
+
+let segundos = 0
+const obtenerDigitos = () => {
+
+  const horas = Math.floor(segundos / 3600);
+  const minutos = Math.floor((segundos % 3600) / 60);
+  const seg = segundos % 60;
+
+  const horasStr = String(horas).padStart(2, '0');
+  const minutosStr = String(minutos).padStart(2, '0');
+  const segundosStr = String(seg).padStart(2, '0');
+
+  return [
+    horasStr[0], horasStr[1], ':',
+    minutosStr[0], minutosStr[1], ':',
+    segundosStr[0], segundosStr[1]
+  ];
+};
+
+const renderizarReloj = () => {
+  const contadorDigital = obtenerDigitos();
+
+  ReactRender.render(
+    <React.StrictMode>
+      <Contador contadorDigital={contadorDigital} />
+    </React.StrictMode>
+  );
+};
+
+
+setInterval(() => {
+  segundos++;
+  renderizarReloj();
+}, 1000);
+
+
